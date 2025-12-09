@@ -1,5 +1,6 @@
 package com.allinmath.backend;
 
+import com.allinmath.backend.util.Logger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -13,6 +14,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class AllinmathBackendApplication {
 
 	public static void main(String[] args) {
+		Logger.i("Starting AllinMath Backend Application...");
 		SpringApplication.run(AllinmathBackendApplication.class, args);
 	}
 
