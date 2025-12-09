@@ -26,6 +26,8 @@ public class SecurityConfig {
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/health/**").permitAll()
+                .requestMatchers("/account/register").permitAll()
+                .requestMatchers("/account/password/reset").permitAll()
                 .anyRequest().authenticated()
             )
             .addFilterBefore(firebaseTokenFilter, UsernamePasswordAuthenticationFilter.class);
