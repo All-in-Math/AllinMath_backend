@@ -1,7 +1,7 @@
 package com.allinmath.backend.service.account;
 
 import com.allinmath.backend.dto.account.ChangeNameDTO;
-import com.allinmath.backend.model.Account;
+import com.allinmath.backend.model.account.Account;
 import com.allinmath.backend.repository.account.AccountRepository;
 import com.allinmath.backend.util.Logger;
 import com.google.firebase.auth.FirebaseAuth;
@@ -22,35 +22,41 @@ public class ChangeNameService {
         this.accountRepository = accountRepository;
     }
 
-    public void execute(String uid, ChangeNameDTO dto) throws Exception {
-        Logger.i("Changing name for user: %s", uid);
+    public void execute(ChangeNameDTO dto) throws Exception {
+        // Start timer
+        long startTime = System.currentTimeMillis();
+
+        Logger.i("Changing name for user: %s", dto.userId());
         try {
             String fullName = dto.getFirstName() + " " + dto.getLastName();
 
-            // Update Firebase Auth
-            UserRecord.UpdateRequest request = new UserRecord.UpdateRequest(uid)
-                    .setDisplayName(fullName);
-            FirebaseAuth.getInstance().updateUser(request);
-            Logger.d("Updated Firebase Auth display name for %s", uid);
+            try {// Update Firebase Auth
+                UserRecord.UpdateRequest request = new UserRecord.UpdateRequest(dto.userId())
+                        .setDisplayName(fullName);
+                FirebaseAuth.getInstance().updateUser(request);
+                Logger.d("Updated Firebase Auth display name for %s", dto.userId());
+            } catch (FirebaseAuthException e) {
+                throw new Exception("Failed to update Firebase Auth display name: " + e.getMessage());
+            }
 
             // Update Firestore
-            Account account = accountRepository.getAccount(uid);
+            Account account = accountRepository.getAccount(dto.userId());
             if (account != null) {
                 account.setFirstName(dto.getFirstName());
                 account.setLastName(dto.getLastName());
                 account.setUpdatedAt(Date.from(Instant.now()));
                 accountRepository.updateAccount(account);
-                Logger.d("Updated Firestore account name for %s", uid);
+
+                // Stop timer and log duration
+                long duration = System.currentTimeMillis() - startTime;
+                Logger.i("Name change completed for %s in %d ms", dto.userId(), duration);
             } else {
-                Logger.w("User account not found in Firestore for %s", uid);
                 throw new Exception("User account not found.");
             }
         } catch (FirebaseAuthException e) {
-             Logger.e("Firebase Auth error during name change: %s", e.getMessage());
-             throw new Exception("Failed to update name: " + e.getMessage());
+            throw new Exception("Firebase Auth error during name change: " + e.getMessage());
         } catch (Exception e) {
-             Logger.e("Unexpected error during name change: %s", e.getMessage());
-             throw new Exception("System error while updating name.");
+            throw new Exception("System error while updating name.");
         }
     }
 }

@@ -1,8 +1,9 @@
 package com.allinmath.backend.service.account;
 
-import com.allinmath.backend.model.Account;
+import com.allinmath.backend.model.account.Account;
 import com.allinmath.backend.repository.account.AccountRepository;
 import com.allinmath.backend.util.Logger;
+import com.allinmath.backend.storage.AccountStorageService;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.UserRecord;
@@ -16,14 +17,19 @@ import java.util.concurrent.ExecutionException;
 public class UpdateProfilePictureService {
 
     private final AccountRepository accountRepository;
+    private final AccountStorageService storageService;
 
-    public UpdateProfilePictureService(AccountRepository accountRepository) {
+    public UpdateProfilePictureService(AccountRepository accountRepository, AccountStorageService storageService) {
         this.accountRepository = accountRepository;
+        this.storageService = storageService;
     }
 
-    public void update(String uid, String photoUrl) throws Exception {
+    public void update(String uid) throws Exception {
         Logger.i("Updating profile picture for user: %s", uid);
         try {
+            // Get the photo URL from the Firebase storage bucket
+            String photoUrl = storageService.getUserProfilePictureUrl(uid);
+
             // Update Firebase Auth
             UserRecord.UpdateRequest request = new UserRecord.UpdateRequest(uid)
                     .setPhotoUrl(photoUrl);

@@ -4,6 +4,7 @@ import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.firestore.Firestore;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
+import com.google.firebase.cloud.StorageClient;
 import com.google.firebase.cloud.FirestoreClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -20,14 +21,22 @@ public class FirebaseConfig {
     @Value("${firebase.config.path}")
     private String firebaseConfigPath;
 
+    @Value("${firebase.storage.bucket:}")
+    private String firebaseStorageBucket;
+
     @PostConstruct
     public void initialize() {
         try {
             if (FirebaseApp.getApps().isEmpty()) {
                 InputStream serviceAccount = new FileInputStream(firebaseConfigPath);
-                FirebaseOptions options = FirebaseOptions.builder()
-                        .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-                        .build();
+                FirebaseOptions.Builder builder = FirebaseOptions.builder()
+                        .setCredentials(GoogleCredentials.fromStream(serviceAccount));
+
+                if (firebaseStorageBucket != null && !firebaseStorageBucket.isBlank()) {
+                    builder.setStorageBucket(firebaseStorageBucket);
+                }
+
+                FirebaseOptions options = builder.build();
 
                 FirebaseApp.initializeApp(options);
             }

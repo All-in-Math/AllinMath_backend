@@ -1,6 +1,6 @@
 package com.allinmath.backend.repository.account;
 
-import com.allinmath.backend.model.Account;
+import com.allinmath.backend.model.account.Account;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;

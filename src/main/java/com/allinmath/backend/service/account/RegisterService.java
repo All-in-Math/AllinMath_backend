@@ -1,17 +1,13 @@
 package com.allinmath.backend.service.account;
 
 import com.allinmath.backend.dto.account.SignUpDTO;
-import com.allinmath.backend.model.Account;
-import com.allinmath.backend.repository.account.AccountRepository;
 import com.allinmath.backend.util.Logger;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.UserRecord;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-
-import java.time.Instant;
-import java.util.Date;
-import java.util.concurrent.ExecutionException;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class RegisterService {
@@ -42,6 +38,9 @@ public class RegisterService {
             return customToken;
         } catch (FirebaseAuthException e) {
             Logger.e("Firebase Auth Error during registration: %s", e.getMessage());
+            if (e.getMessage() != null && e.getMessage().contains("EMAIL_EXISTS")) {
+                throw new ResponseStatusException(HttpStatus.CONFLICT, "The user with the provided email already exists.");
+            }
             throw new Exception("Registration failed: " + e.getMessage());
         } catch (Exception e) {
             Logger.e("Unexpected error during registration: %s", e.getMessage());
