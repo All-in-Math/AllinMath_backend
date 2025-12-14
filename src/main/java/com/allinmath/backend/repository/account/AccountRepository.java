@@ -28,6 +28,7 @@ public class AccountRepository {
         DocumentReference docRef = getFirestore().collection("account").document(uid);
         ApiFuture<DocumentSnapshot> future = docRef.get();
         DocumentSnapshot document = future.get();
+
         if (document.exists()) {
             return document.toObject(Account.class);
         } else {
@@ -37,7 +38,7 @@ public class AccountRepository {
 
     public void updateAccount(Account account) throws ExecutionException, InterruptedException {
         DocumentReference docRef = getFirestore().collection("account").document(account.getUid());
-        ApiFuture<WriteResult> result = docRef.set(account); // Using set to overwrite/update
+        ApiFuture<WriteResult> result = docRef.set(account);
         result.get();
     }
 }

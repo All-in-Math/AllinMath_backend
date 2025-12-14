@@ -20,12 +20,4 @@ public class ChangeNameDTO {
     public String getLastName() {
         return lastName;
     }
-
-    public String userId() {
-        // Extract user ID from security context
-        FirebaseAuthenticationToken authToken =
-                (FirebaseAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-        FirebaseToken token = (FirebaseToken) authToken.getPrincipal();
-        return token.getUid();
-    }
 }

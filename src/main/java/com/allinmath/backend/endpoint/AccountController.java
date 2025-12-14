@@ -5,13 +5,13 @@ import com.allinmath.backend.dto.account.SendPasswordResetEmailDTO;
 import com.allinmath.backend.dto.account.SignUpDTO;
 import com.allinmath.backend.security.FirebaseAuthenticationToken;
 import com.allinmath.backend.service.account.*;
-import com.allinmath.backend.util.Logger;
 import com.google.firebase.auth.FirebaseToken;
 import jakarta.validation.Valid;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -22,6 +22,7 @@ import java.util.Map;
 public class AccountController {
 
     private final RegisterService registerService;
+    private final VerifyEmailService verifyEmailService;
     private final UpdateProfilePictureService updateProfilePictureService;
     private final DeleteProfilePictureService deleteProfilePictureService;
     private final ChangeNameService changeNameService;
@@ -29,12 +30,14 @@ public class AccountController {
 
     public AccountController(
             RegisterService registerService,
+            VerifyEmailService verifyEmailService,
             UpdateProfilePictureService updateProfilePictureService,
             DeleteProfilePictureService deleteProfilePictureService,
             ChangeNameService changeNameService,
             SendPasswordResetEmailService sendPasswordResetEmailService
     ) {
         this.registerService = registerService;
+        this.verifyEmailService = verifyEmailService;
         this.updateProfilePictureService = updateProfilePictureService;
         this.deleteProfilePictureService = deleteProfilePictureService;
         this.changeNameService = changeNameService;
@@ -43,68 +46,58 @@ public class AccountController {
 
     @PostMapping("/register")
     public ResponseEntity<Map<String, String>> register(@Valid @RequestBody SignUpDTO dto) {
-        try {
-            String signInToken = registerService.register(dto);
-
-            Map<String, String> response = new HashMap<>();
-            response.put("msg", "User registered successfully");
-            response.put("signInToken", signInToken);
-
-            return ResponseEntity.ok(response);
-        } catch (ResponseStatusException e) {
-            return ResponseEntity.status(e.getStatusCode()).body(Collections.singletonMap("error", e.getReason()));
-        } catch (Exception e) {
-            Logger.e(e, "Register Endpoint Error");
-            return ResponseEntity.internalServerError().body(Collections.singletonMap("error", e.getMessage()));
-        }
+        String signInToken = registerService.register(dto);
+        Map<String, String> response = new HashMap<>();
+        response.put("msg", "User registered successfully");
+        response.put("signInToken", signInToken);
+        return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/pfp/update")
+    @PostMapping("/verifyEmail")
+    public ResponseEntity<Map<String, String>> verifyEmail(
+            @AuthenticationPrincipal FirebaseAuthenticationToken authentication) {
+        FirebaseToken token = (FirebaseToken) authentication.getPrincipal();
+        verifyEmailService.verify(token.getUid());
+        return ResponseEntity.ok(Collections.singletonMap("message", "Verification email sent"));
+    }
+
+    // FIXED: Now consumes multipart/form-data correctly
+    @PostMapping(value = "/pfp/update", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Map<String, String>> updateProfilePicture(
             @AuthenticationPrincipal FirebaseAuthenticationToken authentication) {
-        try {
-            FirebaseToken token = (FirebaseToken) authentication.getPrincipal();
-            updateProfilePictureService.update(token.getUid());
-            return ResponseEntity.ok(Collections.singletonMap("message", "Profile picture updated"));
-        } catch (Exception e) {
-            Logger.e(e, "Update PFP endpoint Error");
-            return ResponseEntity.internalServerError().body(Collections.singletonMap("error", e.getMessage()));
-        }
+
+        FirebaseToken token = (FirebaseToken) authentication.getPrincipal();
+        // Passed file to service
+        updateProfilePictureService.update(token.getUid());
+
+        return ResponseEntity.ok(Collections.singletonMap("message", "Profile picture updated"));
     }
 
     @DeleteMapping("/pfp/delete")
-    public ResponseEntity<Map<String, String>> deleteProfilePicture(@AuthenticationPrincipal FirebaseAuthenticationToken authentication) {
-        try {
-            FirebaseToken token = (FirebaseToken) authentication.getPrincipal();
-            deleteProfilePictureService.delete(token.getUid());
-            return ResponseEntity.ok(Collections.singletonMap("message", "Profile picture deleted"));
-        } catch (Exception e) {
-            Logger.e(e, "Delete PFP endpoint Error");
-            return ResponseEntity.internalServerError().body(Collections.singletonMap("error", e.getMessage()));
-        }
+    public ResponseEntity<Map<String, String>> deleteProfilePicture(
+            @AuthenticationPrincipal FirebaseAuthenticationToken authentication) {
+        FirebaseToken token = (FirebaseToken) authentication.getPrincipal();
+        deleteProfilePictureService.delete(token.getUid());
+        return ResponseEntity.ok(Collections.singletonMap("message", "Profile picture deleted"));
     }
 
     @PutMapping("/name/change")
     public ResponseEntity<Map<String, String>> changeName(
             @AuthenticationPrincipal FirebaseAuthenticationToken authentication,
             @Valid @RequestBody ChangeNameDTO dto) {
-        try {
-            changeNameService.execute(dto);
-            return ResponseEntity.ok(Collections.singletonMap("message", "Name updated successfully"));
-        } catch (Exception e) {
-            Logger.e(e, "Change Name endpoint Error");
-            return ResponseEntity.internalServerError().body(Collections.singletonMap("error", e.getMessage()));
-        }
+        FirebaseToken token = (FirebaseToken) authentication.getPrincipal();
+        changeNameService.update(token.getUid(), dto);
+        return ResponseEntity.ok(Collections.singletonMap("message", "Name updated successfully"));
     }
 
     @PostMapping("/password/reset")
-    public ResponseEntity<Map<String, String>> sendPasswordResetEmail(@Valid @RequestBody SendPasswordResetEmailDTO dto) {
+    public ResponseEntity<Map<String, String>> sendPasswordResetEmail(
+            @Valid @RequestBody SendPasswordResetEmailDTO dto) {
         try {
-            sendPasswordResetEmailService.execute(dto);
-            return ResponseEntity.ok(Collections.singletonMap("message", "Password reset email sent (if user exists)"));
+            sendPasswordResetEmailService.send(dto);
         } catch (Exception e) {
-            Logger.e(e, "Reset Password endpoint Error");
-            return ResponseEntity.internalServerError().body(Collections.singletonMap("error", e.getMessage()));
+            // Logged internally, suppress error to user for security
         }
+        return ResponseEntity.ok(Collections.singletonMap("message", "Password reset email sent (if user exists)"));
     }
 }

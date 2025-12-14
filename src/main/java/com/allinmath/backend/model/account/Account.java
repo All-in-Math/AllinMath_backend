@@ -1,7 +1,7 @@
 package com.allinmath.backend.model.account;
 
+import com.google.cloud.Timestamp;
 import java.util.List;
-import java.util.Date;
 
 public class Account {
     private String uid;
@@ -14,122 +14,60 @@ public class Account {
     private List<String> sections;
     private StudentProfile studentProfile;
     private TeacherProfile teacherProfile;
-    private Date createdAt;
-    private Date updatedAt;
+
+    // Changed from Date to Timestamp
+    private Timestamp createdAt;
+    private Timestamp updatedAt;
     private boolean isEnabled;
-    private Date lastLoginAt;
+    private Timestamp lastLoginAt;
+
+    private AuthMeta authMeta;
 
     public Account() {}
 
-    public String getUid() {
-        return uid;
-    }
+    // Getters and Setters
+    public String getUid() { return uid; }
+    public void setUid(String uid) { this.uid = uid; }
 
-    public void setUid(String uid) {
-        this.uid = uid;
-    }
+    public String getFirstName() { return firstName; }
+    public void setFirstName(String firstName) { this.firstName = firstName; }
 
-    public String getFirstName() {
-        return firstName;
-    }
+    public String getLastName() { return lastName; }
+    public void setLastName(String lastName) { this.lastName = lastName; }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 
-    public String getLastName() {
-        return lastName;
-    }
+    public UserRole getRole() { return role; }
+    public void setRole(UserRole role) { this.role = role; }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
+    public String getBio() { return bio; }
+    public void setBio(String bio) { this.bio = bio; }
 
-    public String getEmail() {
-        return email;
-    }
+    public String getProfileImageUrl() { return profileImageUrl; }
+    public void setProfileImageUrl(String profileImageUrl) { this.profileImageUrl = profileImageUrl; }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+    public List<String> getSections() { return sections; }
+    public void setSections(List<String> sections) { this.sections = sections; }
 
-    public UserRole getRole() {
-        return role;
-    }
+    public StudentProfile getStudentProfile() { return studentProfile; }
+    public void setStudentProfile(StudentProfile studentProfile) { this.studentProfile = studentProfile; }
 
-    public void setRole(UserRole role) {
-        this.role = role;
-    }
+    public TeacherProfile getTeacherProfile() { return teacherProfile; }
+    public void setTeacherProfile(TeacherProfile teacherProfile) { this.teacherProfile = teacherProfile; }
 
-    public String getBio() {
-        return bio;
-    }
+    public Timestamp getCreatedAt() { return createdAt; }
+    public void setCreatedAt(Timestamp createdAt) { this.createdAt = createdAt; }
 
-    public void setBio(String bio) {
-        this.bio = bio;
-    }
+    public Timestamp getUpdatedAt() { return updatedAt; }
+    public void setUpdatedAt(Timestamp updatedAt) { this.updatedAt = updatedAt; }
 
-    public String getProfileImageUrl() {
-        return profileImageUrl;
-    }
+    public boolean isEnabled() { return isEnabled; }
+    public void setEnabled(boolean enabled) { isEnabled = enabled; }
 
-    public void setProfileImageUrl(String profileImageUrl) {
-        this.profileImageUrl = profileImageUrl;
-    }
+    public Timestamp getLastLoginAt() { return lastLoginAt; }
+    public void setLastLoginAt(Timestamp lastLoginAt) { this.lastLoginAt = lastLoginAt; }
 
-    public List<String> getSections() {
-        return sections;
-    }
-
-    public void setSections(List<String> sections) {
-        this.sections = sections;
-    }
-
-    public StudentProfile getStudentProfile() {
-        return studentProfile;
-    }
-
-    public void setStudentProfile(StudentProfile studentProfile) {
-        this.studentProfile = studentProfile;
-    }
-
-    public TeacherProfile getTeacherProfile() {
-        return teacherProfile;
-    }
-
-    public void setTeacherProfile(TeacherProfile teacherProfile) {
-        this.teacherProfile = teacherProfile;
-    }
-
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public boolean isEnabled() {
-        return isEnabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        isEnabled = enabled;
-    }
-
-    public Date getLastLoginAt() {
-        return lastLoginAt;
-    }
-
-    public void setLastLoginAt(Date lastLoginAt) {
-        this.lastLoginAt = lastLoginAt;
-    }
+    public AuthMeta getAuthMeta() { return authMeta; }
+    public void setAuthMeta(AuthMeta authMeta) { this.authMeta = authMeta; }
 }
