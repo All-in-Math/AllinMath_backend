@@ -65,6 +65,10 @@ public class SendVerificationEmailService {
             resend.emails().send(params);
             Logger.i("Verification email sent to %s", user.getEmail());
 
+            Account account = accountRepository.getAccount(uid);
+            account.getAuthMeta().setLastEmailVerificationSentAt(Timestamp.now());
+            accountRepository.updateAccount(account);
+
         } catch (Exception e) {
             Logger.e("Failed to process email verification: %s", e.getMessage());
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to verify email. Please try again later.");
