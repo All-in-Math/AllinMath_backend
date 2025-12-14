@@ -11,7 +11,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -22,7 +21,7 @@ import java.util.Map;
 public class AccountController {
 
     private final RegisterService registerService;
-    private final VerifyEmailService verifyEmailService;
+    private final SendVerificationEmailService verifyEmailService;
     private final UpdateProfilePictureService updateProfilePictureService;
     private final DeleteProfilePictureService deleteProfilePictureService;
     private final ChangeNameService changeNameService;
@@ -30,7 +29,7 @@ public class AccountController {
 
     public AccountController(
             RegisterService registerService,
-            VerifyEmailService verifyEmailService,
+            SendVerificationEmailService verifyEmailService,
             UpdateProfilePictureService updateProfilePictureService,
             DeleteProfilePictureService deleteProfilePictureService,
             ChangeNameService changeNameService,

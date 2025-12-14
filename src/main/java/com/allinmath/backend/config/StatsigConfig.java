@@ -1,9 +1,9 @@
 package com.allinmath.backend.config;
 
 import com.allinmath.backend.util.Logger;
-import com.statsig.sdk.InitializationDetails;
-import com.statsig.sdk.Statsig;
-import com.statsig.sdk.StatsigOptions;
+import com.statsig.InitializeDetails;
+import com.statsig.Statsig;
+import com.statsig.StatsigOptions;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,6 +18,8 @@ public class StatsigConfig {
     @Value("${statsig.secret}")
     private String statsigSecret;
 
+    private Statsig statsig;
+
     @PostConstruct
     public void initialize() {
         if (statsigSecret == null || statsigSecret.isEmpty()) {
@@ -25,12 +27,13 @@ public class StatsigConfig {
             return;
         }
 
-        StatsigOptions options = new StatsigOptions();
+        StatsigOptions options = new StatsigOptions.Builder().build();
         // Configure options if needed, e.g.:
         // options.setTier(Tier.DEVELOPMENT);
 
         try {
-            CompletableFuture<InitializationDetails> initFuture = Statsig.initializeAsync(statsigSecret, options);
+            statsig = new Statsig(statsigSecret, options);
+            CompletableFuture<InitializeDetails> initFuture = statsig.initializeWithDetails();
             initFuture.get(); // Wait for initialization
             Logger.i("Statsig initialized successfully.");
         } catch (InterruptedException | ExecutionException e) {
@@ -44,7 +47,9 @@ public class StatsigConfig {
 
     @PreDestroy
     public void shutdown() {
-        Statsig.shutdown();
+        if (statsig != null) {
+            statsig.shutdown();
+        }
         Logger.i("Statsig shutdown.");
     }
 }
