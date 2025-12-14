@@ -1,6 +1,6 @@
 package com.allinmath.backend.model.account;
 
-public class StudentProfile {
+public class StudentProfile extends Account {
     private int gradeLevel;
 
     public StudentProfile(int gradeLevel) {

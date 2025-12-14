@@ -12,15 +12,8 @@ public class Account {
     private String bio;
     private String profileImageUrl;
     private List<String> sections;
-    private StudentProfile studentProfile;
-    private TeacherProfile teacherProfile;
-
-    // Changed from Date to Timestamp
-    private Timestamp createdAt;
     private Timestamp updatedAt;
     private boolean isEnabled;
-    private Timestamp lastLoginAt;
-
     private AuthMeta authMeta;
 
     public Account() {}
@@ -50,23 +43,12 @@ public class Account {
     public List<String> getSections() { return sections; }
     public void setSections(List<String> sections) { this.sections = sections; }
 
-    public StudentProfile getStudentProfile() { return studentProfile; }
-    public void setStudentProfile(StudentProfile studentProfile) { this.studentProfile = studentProfile; }
-
-    public TeacherProfile getTeacherProfile() { return teacherProfile; }
-    public void setTeacherProfile(TeacherProfile teacherProfile) { this.teacherProfile = teacherProfile; }
-
-    public Timestamp getCreatedAt() { return createdAt; }
-    public void setCreatedAt(Timestamp createdAt) { this.createdAt = createdAt; }
 
     public Timestamp getUpdatedAt() { return updatedAt; }
     public void setUpdatedAt(Timestamp updatedAt) { this.updatedAt = updatedAt; }
 
     public boolean isEnabled() { return isEnabled; }
     public void setEnabled(boolean enabled) { isEnabled = enabled; }
-
-    public Timestamp getLastLoginAt() { return lastLoginAt; }
-    public void setLastLoginAt(Timestamp lastLoginAt) { this.lastLoginAt = lastLoginAt; }
 
     public AuthMeta getAuthMeta() { return authMeta; }
     public void setAuthMeta(AuthMeta authMeta) { this.authMeta = authMeta; }

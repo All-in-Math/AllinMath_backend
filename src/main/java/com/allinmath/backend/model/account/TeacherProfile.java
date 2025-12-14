@@ -2,7 +2,7 @@ package com.allinmath.backend.model.account;
 
 import java.util.List;
 
-public class TeacherProfile {
+public class TeacherProfile extends Account {
     private String inviteCode;
     private double hourlyRate;
     private List<String> courses;
