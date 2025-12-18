@@ -1,6 +1,7 @@
 package com.allinmath.backend.model.account;
 
 import com.google.cloud.Timestamp;
+import com.google.cloud.firestore.annotation.Exclude;
 
 public class AuthMeta {
     private Timestamp createdAt;
@@ -105,50 +106,62 @@ public class AuthMeta {
         this.onboarded = onboarded;
     }
 
+    @Exclude
     public boolean isEmailVerified() {
         return emailVerifiedAt != null;
     }
 
+    @Exclude
     public boolean isDisabled() {
         return disabledAt != null;
     }
 
+    @Exclude
     public boolean isDeleted() {
         return deletedAt != null;
     }
 
+    @Exclude
     public boolean isBanned() {
         return bannedAt != null;
     }
 
+    @Exclude
     public boolean isUnbanned() {
         return unbannedAt != null;
     }
 
+    @Exclude
     public boolean isPasswordExpired() {
         return passwordUpdatedAt != null && passwordUpdatedAt.toDate().before(createdAt.toDate());
     }
 
+    @Exclude
     public boolean isEmailVerificationExpired() {
         return lastEmailVerificationSentAt != null && lastEmailVerificationSentAt.toDate().before(createdAt.toDate());
     }
 
+    @Exclude
     public boolean isPasswordResetExpired() {
         return lastPasswordResetAt != null && lastPasswordResetAt.toDate().before(createdAt.toDate());
     }
 
+    @Exclude
     public boolean isAccountExpired() {
         return disabledAt != null || deletedAt != null || bannedAt != null;
     }
 
+    @Exclude
     public boolean isAccountLocked() {
         return isBanned();
     }
 
+    @Exclude
     public boolean isAccountEnabled() {
         return !isAccountExpired() && !isAccountLocked();
     }
 
+    @Exclude
     public boolean isCredentialsExpired() {
         return isPasswordExpired() || isEmailVerificationExpired() || isPasswordResetExpired();
     }

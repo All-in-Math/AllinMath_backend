@@ -41,4 +41,10 @@ public class AccountRepository {
         ApiFuture<WriteResult> result = docRef.set(account);
         result.get();
     }
+
+    public void deleteAccount(String uid) throws ExecutionException, InterruptedException {
+        DocumentReference docRef = getFirestore().collection("account").document(uid);
+        ApiFuture<WriteResult> result = docRef.delete();
+        result.get();
+    }
 }

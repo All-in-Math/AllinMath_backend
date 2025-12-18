@@ -28,8 +28,8 @@ public class SendVerificationEmailService {
         this.resend = resend;
     }
 
-    public void verify(String uid) {
-        Logger.i("Verifying email for user: %s", uid);
+    public void send(String uid) {
+        Logger.i("Sending verification email for user: %s", uid);
         try {
             UserRecord user = FirebaseAuth.getInstance().getUser(uid);
             if (user.isEmailVerified()) {
@@ -53,7 +53,7 @@ public class SendVerificationEmailService {
             }
 
             String link = FirebaseAuth.getInstance().generateEmailVerificationLink(user.getEmail());
-            Logger.i("Generated verification link for %s: %s", user.getEmail(), link);
+            Logger.d("Generated verification link for %s", user.getEmail());
 
             CreateEmailOptions params = CreateEmailOptions.builder()
                     .from(fromEmail)

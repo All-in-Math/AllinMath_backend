@@ -1,13 +1,12 @@
 package com.allinmath.backend.endpoint;
 
+import com.allinmath.backend.dto.account.ChangeEmailDTO;
 import com.allinmath.backend.dto.account.ChangeNameDTO;
 import com.allinmath.backend.dto.account.SendPasswordResetEmailDTO;
 import com.allinmath.backend.dto.account.SignUpDTO;
-import com.allinmath.backend.security.FirebaseAuthenticationToken;
 import com.allinmath.backend.service.account.*;
 import com.google.firebase.auth.FirebaseToken;
 import jakarta.validation.Valid;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +25,7 @@ public class AccountController {
     private final DeleteProfilePictureService deleteProfilePictureService;
     private final ChangeNameService changeNameService;
     private final SendPasswordResetEmailService sendPasswordResetEmailService;
+    private final ChangeEmailService changeEmailService;
 
     public AccountController(
             RegisterService registerService,
@@ -33,7 +33,8 @@ public class AccountController {
             UpdateProfilePictureService updateProfilePictureService,
             DeleteProfilePictureService deleteProfilePictureService,
             ChangeNameService changeNameService,
-            SendPasswordResetEmailService sendPasswordResetEmailService
+            SendPasswordResetEmailService sendPasswordResetEmailService,
+            ChangeEmailService changeEmailService
     ) {
         this.registerService = registerService;
         this.verifyEmailService = verifyEmailService;
@@ -41,6 +42,7 @@ public class AccountController {
         this.deleteProfilePictureService = deleteProfilePictureService;
         this.changeNameService = changeNameService;
         this.sendPasswordResetEmailService = sendPasswordResetEmailService;
+        this.changeEmailService = changeEmailService;
     }
 
     @PostMapping("/register")
@@ -52,21 +54,25 @@ public class AccountController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/verifyEmail")
+    @PostMapping("email/verify")
     public ResponseEntity<Map<String, String>> verifyEmail(
-            @AuthenticationPrincipal FirebaseAuthenticationToken authentication) {
-        FirebaseToken token = (FirebaseToken) authentication.getPrincipal();
-        verifyEmailService.verify(token.getUid());
+            @AuthenticationPrincipal FirebaseToken token) {
+        verifyEmailService.send(token.getUid());
         return ResponseEntity.ok(Collections.singletonMap("message", "Verification email sent"));
     }
 
-    // FIXED: Now consumes multipart/form-data correctly
-    @PostMapping(value = "/pfp/update", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Map<String, String>> updateProfilePicture(
-            @AuthenticationPrincipal FirebaseAuthenticationToken authentication) {
+    @PutMapping("/email/change")
+    public ResponseEntity<Map<String, String>> changeEmail(
+            @AuthenticationPrincipal FirebaseToken token,
+            @Valid @RequestBody ChangeEmailDTO dto) {
+        changeEmailService.change(token.getUid(), dto.getCurrentEmail(), dto.getNewEmail());
+        return ResponseEntity.ok(Collections.singletonMap("message", "Email changed successfully"));
+    }
 
-        FirebaseToken token = (FirebaseToken) authentication.getPrincipal();
-        // Passed file to service
+    @PostMapping("/pfp/update")
+    public ResponseEntity<Map<String, String>> updateProfilePicture(
+            @AuthenticationPrincipal FirebaseToken token) {
+
         updateProfilePictureService.update(token.getUid());
 
         return ResponseEntity.ok(Collections.singletonMap("message", "Profile picture updated"));
@@ -74,17 +80,15 @@ public class AccountController {
 
     @DeleteMapping("/pfp/delete")
     public ResponseEntity<Map<String, String>> deleteProfilePicture(
-            @AuthenticationPrincipal FirebaseAuthenticationToken authentication) {
-        FirebaseToken token = (FirebaseToken) authentication.getPrincipal();
+            @AuthenticationPrincipal FirebaseToken token) {
         deleteProfilePictureService.delete(token.getUid());
         return ResponseEntity.ok(Collections.singletonMap("message", "Profile picture deleted"));
     }
 
     @PutMapping("/name/change")
     public ResponseEntity<Map<String, String>> changeName(
-            @AuthenticationPrincipal FirebaseAuthenticationToken authentication,
+            @AuthenticationPrincipal FirebaseToken token,
             @Valid @RequestBody ChangeNameDTO dto) {
-        FirebaseToken token = (FirebaseToken) authentication.getPrincipal();
         changeNameService.update(token.getUid(), dto);
         return ResponseEntity.ok(Collections.singletonMap("message", "Name updated successfully"));
     }

@@ -16,20 +16,20 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.concurrent.ExecutionException;
+
 @Service
 public class RegisterService {
 
     private final AccountRepository accountRepository;
     private final Resend resend;
-    private final SendVerificationEmailService sendVerificationEmailService;
 
     @Value("${resend.from-email}")
     private String fromEmail;
 
-    public RegisterService(AccountRepository accountRepository, Resend resend, SendVerificationEmailService sendVerificationEmailService) {
+    public RegisterService(AccountRepository accountRepository, Resend resend) {
         this.accountRepository = accountRepository;
         this.resend = resend;
-        this.sendVerificationEmailService = sendVerificationEmailService;
     }
 
     public String register(SignUpDTO dto) {
@@ -78,9 +78,9 @@ public class RegisterService {
                     .build();
             resend.emails().send(welcomeParams);
 
-            // Send verification email
-            sendVerificationEmailService.verify(userRecord.getUid());
-
+            // Send verification email by calling the existing service
+            SendVerificationEmailService sendVerificationEmailService = new SendVerificationEmailService(accountRepository, resend);
+            sendVerificationEmailService.send(userRecord.getUid());
 
             return customToken;
 
@@ -94,8 +94,9 @@ public class RegisterService {
             if (userRecord != null) {
                 try {
                     FirebaseAuth.getInstance().deleteUser(userRecord.getUid());
+                    accountRepository.deleteAccount(userRecord.getUid());
                     Logger.w("Rolled back orphaned Auth user: %s", userRecord.getUid());
-                } catch (FirebaseAuthException ex) {
+                } catch (FirebaseAuthException | ExecutionException | InterruptedException ex) {
                     Logger.e("Failed to rollback user: %s", ex.getMessage());
                 }
             }
