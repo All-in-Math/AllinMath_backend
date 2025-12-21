@@ -4,6 +4,7 @@ import com.allinmath.backend.dto.account.ChangeEmailDTO;
 import com.allinmath.backend.dto.account.ChangeNameDTO;
 import com.allinmath.backend.dto.account.SendPasswordResetEmailDTO;
 import com.allinmath.backend.dto.account.SignUpDTO;
+import com.allinmath.backend.dto.account.CompleteOnboardingDTO;
 import com.allinmath.backend.service.account.*;
 import com.google.firebase.auth.FirebaseToken;
 import jakarta.validation.Valid;
@@ -20,21 +21,23 @@ import java.util.Map;
 public class AccountController {
 
     private final RegisterService registerService;
-    private final SendVerificationEmailService verifyEmailService;
+    private final VerificationEmailService verifyEmailService;
     private final UpdateProfilePictureService updateProfilePictureService;
     private final DeleteProfilePictureService deleteProfilePictureService;
     private final ChangeNameService changeNameService;
     private final SendPasswordResetEmailService sendPasswordResetEmailService;
     private final ChangeEmailService changeEmailService;
+    private final CompleteOnboardingService completeOnboardingService;
 
     public AccountController(
             RegisterService registerService,
-            SendVerificationEmailService verifyEmailService,
+            VerificationEmailService verifyEmailService,
             UpdateProfilePictureService updateProfilePictureService,
             DeleteProfilePictureService deleteProfilePictureService,
             ChangeNameService changeNameService,
             SendPasswordResetEmailService sendPasswordResetEmailService,
-            ChangeEmailService changeEmailService
+            ChangeEmailService changeEmailService,
+            CompleteOnboardingService completeOnboardingService
     ) {
         this.registerService = registerService;
         this.verifyEmailService = verifyEmailService;
@@ -43,6 +46,7 @@ public class AccountController {
         this.changeNameService = changeNameService;
         this.sendPasswordResetEmailService = sendPasswordResetEmailService;
         this.changeEmailService = changeEmailService;
+        this.completeOnboardingService = completeOnboardingService;
     }
 
     @PostMapping("/register")
@@ -54,8 +58,8 @@ public class AccountController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("email/verify")
-    public ResponseEntity<Map<String, String>> verifyEmail(
+    @PutMapping("email/verify/sendEmail")
+    public ResponseEntity<Map<String, String>> sendVerifyEmail(
             @AuthenticationPrincipal FirebaseToken token) {
         verifyEmailService.send(token.getUid());
         return ResponseEntity.ok(Collections.singletonMap("message", "Verification email sent"));
@@ -102,5 +106,13 @@ public class AccountController {
             // Logged internally, suppress error to user for security
         }
         return ResponseEntity.ok(Collections.singletonMap("message", "Password reset email sent (if user exists)"));
+    }
+
+    @PostMapping("/onboarding/complete")
+    public ResponseEntity<Map<String, String>> completeOnboarding(
+            @AuthenticationPrincipal FirebaseToken token,
+            @Valid @RequestBody CompleteOnboardingDTO dto) {
+        completeOnboardingService.complete(token.getUid(), dto);
+        return ResponseEntity.ok(Collections.singletonMap("message", "Onboarding completed successfully"));
     }
 }

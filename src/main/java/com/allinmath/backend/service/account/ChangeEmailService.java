@@ -56,7 +56,7 @@ public class ChangeEmailService {
                     accountRepository.updateAccount(account);
                     Logger.i("Updated Firestore account email for user: %s", uid);
 
-                    // Send welcome email
+                    // Send a welcome email
                     CreateEmailOptions welcomeParams = CreateEmailOptions.builder()
                             .from(fromEmail)
                             .to(newEmail)
@@ -67,10 +67,8 @@ public class ChangeEmailService {
                     Logger.i("Sent welcome email to: %s", newEmail);
 
                     // Send verification email by calling the existing service
-                    SendVerificationEmailService sendVerificationEmailService = new SendVerificationEmailService(accountRepository, resend);
+                    VerificationEmailService sendVerificationEmailService = new VerificationEmailService(accountRepository, resend);
                     sendVerificationEmailService.send(userRecord.getUid());
-                    Logger.i("Sent verification email to: %s", newEmail);
-                    
                 } else {
                     Logger.w("Account not found in Firestore for user: %s", uid);
                     throw new ResponseStatusException(HttpStatus.NOT_FOUND, "An error occurred while fetching your account data.");

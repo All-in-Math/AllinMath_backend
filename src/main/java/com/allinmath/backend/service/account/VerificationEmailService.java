@@ -1,6 +1,7 @@
 package com.allinmath.backend.service.account;
 
 import com.allinmath.backend.model.account.Account;
+import com.allinmath.backend.model.account.AuthMeta;
 import com.allinmath.backend.repository.account.AccountRepository;
 import com.allinmath.backend.util.Logger;
 import com.google.cloud.Timestamp;
@@ -14,7 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
-public class SendVerificationEmailService {
+public class VerificationEmailService {
 
     private final AccountRepository accountRepository;
     private final Resend resend;
@@ -23,7 +24,7 @@ public class SendVerificationEmailService {
     private String fromEmail;
 
     // 1. Inject the repository via constructor
-    public SendVerificationEmailService(AccountRepository accountRepository, Resend resend) {
+    public VerificationEmailService(AccountRepository accountRepository, Resend resend) {
         this.accountRepository = accountRepository;
         this.resend = resend;
     }

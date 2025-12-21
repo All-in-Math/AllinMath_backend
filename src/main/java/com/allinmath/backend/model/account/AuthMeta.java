@@ -7,7 +7,6 @@ public class AuthMeta {
     private Timestamp createdAt;
     private Timestamp lastLoginAt;
     private Timestamp passwordUpdatedAt;
-    private Timestamp emailVerifiedAt;
     private Timestamp disabledAt;
     private Timestamp deletedAt;
     private Timestamp bannedAt;
@@ -40,14 +39,6 @@ public class AuthMeta {
 
     public void setPasswordUpdatedAt(Timestamp passwordUpdatedAt) {
         this.passwordUpdatedAt = passwordUpdatedAt;
-    }
-
-    public Timestamp getEmailVerifiedAt() {
-        return emailVerifiedAt;
-    }
-
-    public void setEmailVerifiedAt(Timestamp emailVerifiedAt) {
-        this.emailVerifiedAt = emailVerifiedAt;
     }
 
     public Timestamp getDisabledAt() {
@@ -107,11 +98,6 @@ public class AuthMeta {
     }
 
     @Exclude
-    public boolean isEmailVerified() {
-        return emailVerifiedAt != null;
-    }
-
-    @Exclude
     public boolean isDisabled() {
         return disabledAt != null;
     }
@@ -167,6 +153,6 @@ public class AuthMeta {
     }
 
     public String toString() {
-        return "AuthMeta [createdAt=" + createdAt + ", lastLoginAt=" + lastLoginAt + ", passwordUpdatedAt=" + passwordUpdatedAt + ", emailVerifiedAt=" + emailVerifiedAt + ", disabledAt=" + disabledAt + ", deletedAt=" + deletedAt + ", bannedAt=" + bannedAt + ", unbannedAt=" + unbannedAt + ", lastPasswordResetAt=" + lastPasswordResetAt + ", lastEmailVerificationSentAt=" + lastEmailVerificationSentAt + "]";
+        return "AuthMeta [createdAt=" + createdAt + ", lastLoginAt=" + lastLoginAt + ", passwordUpdatedAt=" + passwordUpdatedAt + ", disabledAt=" + disabledAt + ", deletedAt=" + deletedAt + ", bannedAt=" + bannedAt + ", unbannedAt=" + unbannedAt + ", lastPasswordResetAt=" + lastPasswordResetAt + ", lastEmailVerificationSentAt=" + lastEmailVerificationSentAt + "]";
     }
 }

@@ -7,6 +7,8 @@ public class StudentProfile extends Account {
         this.gradeLevel = gradeLevel;
     }
 
+    public StudentProfile() {}
+
     public int getGradeLevel() {
         return gradeLevel;
     }

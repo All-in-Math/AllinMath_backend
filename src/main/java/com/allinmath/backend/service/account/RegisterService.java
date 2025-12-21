@@ -23,13 +23,15 @@ public class RegisterService {
 
     private final AccountRepository accountRepository;
     private final Resend resend;
+    private final VerificationEmailService verificationEmailService;
 
     @Value("${resend.from-email}")
     private String fromEmail;
 
-    public RegisterService(AccountRepository accountRepository, Resend resend) {
+    public RegisterService(AccountRepository accountRepository, Resend resend, VerificationEmailService verificationEmailService) {
         this.accountRepository = accountRepository;
         this.resend = resend;
+        this.verificationEmailService = verificationEmailService;
     }
 
     public String register(SignUpDTO dto) {
@@ -79,8 +81,7 @@ public class RegisterService {
             resend.emails().send(welcomeParams);
 
             // Send verification email by calling the existing service
-            SendVerificationEmailService sendVerificationEmailService = new SendVerificationEmailService(accountRepository, resend);
-            sendVerificationEmailService.send(userRecord.getUid());
+            verificationEmailService.send(userRecord.getUid());
 
             return customToken;
 

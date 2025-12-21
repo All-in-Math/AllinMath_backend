@@ -11,6 +11,7 @@ public class Account {
     private UserRole role;
     private String bio;
     private String profileImageUrl;
+    private int age;
     private List<String> sections;
     private Timestamp updatedAt;
     private boolean isEnabled;
@@ -42,6 +43,9 @@ public class Account {
 
     public List<String> getSections() { return sections; }
     public void setSections(List<String> sections) { this.sections = sections; }
+
+    public int getAge() { return age; }
+    public void setAge(int age) { this.age = age; }
 
 
     public Timestamp getUpdatedAt() { return updatedAt; }
