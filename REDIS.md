@@ -4,10 +4,12 @@ This document describes the Redis integration and rate limiting features added t
 
 ## Overview
 
-The application now includes Redis server integration with built-in rate limiting capabilities to:
+The application now includes Redis server infrastructure and built-in rate limiting capabilities to:
 - Prevent abuse of sensitive endpoints (registration, password reset, email verification)
-- Improve performance through caching infrastructure
-- Enable scalable distributed rate limiting
+- Enable future caching and session management features
+- Provide scalable distributed rate limiting infrastructure
+
+**Note:** The current rate limiting implementation uses in-memory storage (single-server). Redis connection is configured and ready for future distributed rate limiting when deploying across multiple server instances.
 
 ## Configuration
 
@@ -103,9 +105,19 @@ Unit tests and integration tests are included in:
 The rate limiting implementation uses:
 
 - **Bucket4j**: Token bucket algorithm for rate limiting
-- **Redis**: Distributed storage (with local cache fallback)
+- **In-Memory Storage**: Currently uses ConcurrentHashMap for single-server deployments
+- **Redis (Configured)**: Redis connection is configured and available for future distributed rate limiting
 - **Spring Interceptor**: Applied automatically to annotated endpoints
 
 Rate limits are applied based on:
 - **Authenticated requests**: User ID (Firebase UID)
 - **Unauthenticated requests**: IP address (supports X-Forwarded-For headers)
+
+## Future Enhancements
+
+To enable distributed rate limiting across multiple server instances:
+1. Add `bucket4j-redis` dependency
+2. Update `RateLimitService` to use Redis-backed buckets instead of ConcurrentHashMap
+3. Configure Bucket4j Redis integration with the existing RedisConnectionFactory
+
+The Redis infrastructure (RedisConfig, RedisTemplate, connection properties) is already in place to support this upgrade.

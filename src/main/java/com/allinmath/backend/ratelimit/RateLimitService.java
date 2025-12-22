@@ -3,23 +3,24 @@ package com.allinmath.backend.ratelimit;
 import com.allinmath.backend.util.Logger;
 import io.github.bucket4j.Bandwidth;
 import io.github.bucket4j.Bucket;
-import io.github.bucket4j.BucketConfiguration;
 import io.github.bucket4j.Refill;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Service for managing rate limits using Redis and Bucket4j
- * Implements token bucket algorithm for distributed rate limiting
+ * Service for managing rate limits using Bucket4j
+ * Implements token bucket algorithm for rate limiting
+ * 
+ * Note: This implementation uses in-memory storage (ConcurrentHashMap).
+ * For true distributed rate limiting across multiple server instances,
+ * integrate Bucket4j with Redis using bucket4j-redis module.
  */
 @Service
 public class RateLimitService {
 
-    private final RedisTemplate<String, Object> redisTemplate;
     private final ConcurrentHashMap<String, Bucket> localBuckets = new ConcurrentHashMap<>();
     
     @Value("${ratelimit.enabled}")
@@ -42,10 +43,6 @@ public class RateLimitService {
 
     @Value("${ratelimit.sensitive.refill-duration-minutes}")
     private long sensitiveRefillDurationMinutes;
-
-    public RateLimitService(RedisTemplate<String, Object> redisTemplate) {
-        this.redisTemplate = redisTemplate;
-    }
 
     /**
      * Checks if a request is allowed based on rate limit
@@ -106,10 +103,6 @@ public class RateLimitService {
             );
         }
         
-        BucketConfiguration configuration = BucketConfiguration.builder()
-            .addLimit(limit)
-            .build();
-            
         return Bucket.builder()
             .addLimit(limit)
             .build();
