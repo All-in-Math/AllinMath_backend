@@ -87,6 +87,19 @@
 			<artifactId>resend-java</artifactId>
 			<version>4.11.0</version>
 		</dependency>
+
+		<!-- Redis -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-redis</artifactId>
+		</dependency>
+
+		<!-- Bucket4j for Rate Limiting -->
+		<dependency>
+			<groupId>com.bucket4j</groupId>
+			<artifactId>bucket4j-core</artifactId>
+			<version>8.10.1</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -113,6 +126,9 @@
 
 					<!-- provide your auth token via SENTRY_AUTH_TOKEN environment variable -->
 					<authToken>${SENTRY_AUTH_TOKEN}</authToken>
+					
+					<!-- Skip Sentry upload if auth token is not set -->
+					<skip>${sentry.skip}</skip>
 				</configuration>
 				<executions>
 					<execution>
@@ -170,6 +186,7 @@
 			</activation>
 			<properties>
 				<SENTRY_AUTH_TOKEN>${env.SENTRY_AUTH_TOKEN}</SENTRY_AUTH_TOKEN>
+				<sentry.skip>true</sentry.skip>
 			</properties>
 		</profile>
 	</profiles>

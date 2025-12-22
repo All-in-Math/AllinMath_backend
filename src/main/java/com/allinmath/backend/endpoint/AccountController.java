@@ -5,6 +5,8 @@ import com.allinmath.backend.dto.account.ChangeNameDTO;
 import com.allinmath.backend.dto.account.SendPasswordResetEmailDTO;
 import com.allinmath.backend.dto.account.SignUpDTO;
 import com.allinmath.backend.dto.account.CompleteOnboardingDTO;
+import com.allinmath.backend.ratelimit.RateLimit;
+import com.allinmath.backend.ratelimit.RateLimitType;
 import com.allinmath.backend.service.account.*;
 import com.google.firebase.auth.FirebaseToken;
 import jakarta.validation.Valid;
@@ -50,6 +52,7 @@ public class AccountController {
     }
 
     @PostMapping("/register")
+    @RateLimit(type = RateLimitType.SENSITIVE)
     public ResponseEntity<Map<String, String>> register(@Valid @RequestBody SignUpDTO dto) {
         String signInToken = registerService.register(dto);
         Map<String, String> response = new HashMap<>();
@@ -59,6 +62,7 @@ public class AccountController {
     }
 
     @PutMapping("email/verify/sendEmail")
+    @RateLimit(type = RateLimitType.SENSITIVE)
     public ResponseEntity<Map<String, String>> sendVerifyEmail(
             @AuthenticationPrincipal FirebaseToken token) {
         verifyEmailService.send(token.getUid());
@@ -66,6 +70,7 @@ public class AccountController {
     }
 
     @PutMapping("/email/change")
+    @RateLimit(type = RateLimitType.SENSITIVE)
     public ResponseEntity<Map<String, String>> changeEmail(
             @AuthenticationPrincipal FirebaseToken token,
             @Valid @RequestBody ChangeEmailDTO dto) {
@@ -98,6 +103,7 @@ public class AccountController {
     }
 
     @PostMapping("/password/reset")
+    @RateLimit(type = RateLimitType.SENSITIVE)
     public ResponseEntity<Map<String, String>> sendPasswordResetEmail(
             @Valid @RequestBody SendPasswordResetEmailDTO dto) {
         try {
@@ -109,6 +115,7 @@ public class AccountController {
     }
 
     @PostMapping("/onboarding/complete")
+    @RateLimit(type = RateLimitType.DEFAULT)
     public ResponseEntity<Map<String, String>> completeOnboarding(
             @AuthenticationPrincipal FirebaseToken token,
             @Valid @RequestBody CompleteOnboardingDTO dto) {
