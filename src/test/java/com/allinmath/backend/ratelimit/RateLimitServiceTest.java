@@ -1,10 +1,8 @@
 package com.allinmath.backend.ratelimit;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -20,7 +18,9 @@ import static org.junit.jupiter.api.Assertions.*;
     "ratelimit.default.refill-duration-minutes=1",
     "ratelimit.sensitive.capacity=3",
     "ratelimit.sensitive.refill-tokens=3",
-    "ratelimit.sensitive.refill-duration-minutes=1"
+    "ratelimit.sensitive.refill-duration-minutes=1",
+    "spring.data.redis.host=localhost",
+    "spring.data.redis.port=6379"
 })
 class RateLimitServiceTest {
 
@@ -29,7 +29,7 @@ class RateLimitServiceTest {
 
     @Test
     void testDefaultRateLimitAllowsRequests() {
-        String key = "test-user-1";
+        String key = "test-user-1-" + System.currentTimeMillis();
         
         // Should allow up to capacity requests
         for (int i = 0; i < 5; i++) {
@@ -44,7 +44,7 @@ class RateLimitServiceTest {
 
     @Test
     void testSensitiveRateLimitAllowsRequests() {
-        String key = "test-user-2";
+        String key = "test-user-2-" + System.currentTimeMillis();
         
         // Should allow up to capacity requests
         for (int i = 0; i < 3; i++) {
@@ -59,8 +59,8 @@ class RateLimitServiceTest {
 
     @Test
     void testDifferentKeysHaveSeparateLimits() {
-        String key1 = "test-user-3";
-        String key2 = "test-user-4";
+        String key1 = "test-user-3-" + System.currentTimeMillis();
+        String key2 = "test-user-4-" + System.currentTimeMillis();
         
         // Consume all tokens for key1
         for (int i = 0; i < 5; i++) {
@@ -76,7 +76,7 @@ class RateLimitServiceTest {
 
     @Test
     void testGetAvailableTokens() {
-        String key = "test-user-5";
+        String key = "test-user-5-" + System.currentTimeMillis();
         
         // Initially should have full capacity
         long available = rateLimitService.getAvailableTokens(key, RateLimitType.DEFAULT);
@@ -92,7 +92,7 @@ class RateLimitServiceTest {
 
     @Test
     void testResetRateLimit() {
-        String key = "test-user-6";
+        String key = "test-user-6-" + System.currentTimeMillis();
         
         // Consume all tokens
         for (int i = 0; i < 5; i++) {

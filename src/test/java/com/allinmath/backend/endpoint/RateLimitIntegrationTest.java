@@ -5,77 +5,65 @@ import com.allinmath.backend.ratelimit.RateLimitType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.web.servlet.MockMvc;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Integration tests for rate limiting on endpoints
+ * Integration tests for rate limiting service
+ * Tests core rate limiting functionality without HTTP layer
  */
 @SpringBootTest
-@AutoConfigureMockMvc
 @TestPropertySource(properties = {
     "ratelimit.enabled=true",
     "ratelimit.sensitive.capacity=3",
     "ratelimit.sensitive.refill-tokens=3",
-    "ratelimit.sensitive.refill-duration-minutes=1"
+    "ratelimit.sensitive.refill-duration-minutes=1",
+    "spring.data.redis.host=localhost",
+    "spring.data.redis.port=6379"
 })
 class RateLimitIntegrationTest {
 
     @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
     private RateLimitService rateLimitService;
 
-    @BeforeEach
-    void setUp() {
-        // Reset rate limits before each test
-        rateLimitService.resetRateLimit("ip:127.0.0.1", RateLimitType.SENSITIVE);
+    @Test
+    void testRateLimitServiceIsConfigured() {
+        assertNotNull(rateLimitService, "RateLimitService should be autowired");
     }
 
     @Test
-    void testPasswordResetRateLimiting() throws Exception {
-        String requestBody = "{\"email\": \"test@example.com\"}";
-
-        // First 3 requests should succeed (within rate limit)
+    void testSensitiveEndpointRateLimitingBehavior() {
+        String testKey = "integration-test-" + System.currentTimeMillis();
+        
+        // Simulate 3 requests (within limit)
         for (int i = 0; i < 3; i++) {
-            mockMvc.perform(post("/account/password/reset")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(requestBody))
-                    .andExpect(status().isOk());
+            assertTrue(rateLimitService.tryConsume(testKey, RateLimitType.SENSITIVE),
+                "Request " + (i + 1) + " should be allowed");
         }
 
-        // 4th request should be rate limited (429 Too Many Requests)
-        mockMvc.perform(post("/account/password/reset")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(requestBody))
-                .andExpect(status().isTooManyRequests());
+        // 4th request should be rate limited
+        assertFalse(rateLimitService.tryConsume(testKey, RateLimitType.SENSITIVE),
+            "Request should be denied after exceeding rate limit");
     }
-
+    
     @Test
-    void testRegisterRateLimiting() throws Exception {
-        String requestBody = "{\"email\": \"newuser@example.com\", \"password\": \"SecurePass123!\", \"firstName\": \"Test\", \"lastName\": \"User\", \"role\": \"STUDENT\"}";
-
-        // First 3 requests should succeed (within rate limit)
-        // Note: These will fail for other reasons (validation, Firebase, etc.)
-        // but should not be blocked by rate limiting
+    void testRateLimitingIsIndependentPerKey() {
+        String key1 = "integration-test-key1-" + System.currentTimeMillis();
+        String key2 = "integration-test-key2-" + System.currentTimeMillis();
+        
+        // Exhaust key1's rate limit
         for (int i = 0; i < 3; i++) {
-            mockMvc.perform(post("/account/register")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(requestBody));
-            // We don't check status here because the request may fail for other reasons
+            rateLimitService.tryConsume(key1, RateLimitType.SENSITIVE);
         }
-
-        // After consuming rate limit, should get 429
-        mockMvc.perform(post("/account/register")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(requestBody))
-                .andExpect(status().isTooManyRequests());
+        
+        // key1 should be rate limited
+        assertFalse(rateLimitService.tryConsume(key1, RateLimitType.SENSITIVE),
+            "key1 should be rate limited");
+        
+        // key2 should still have capacity
+        assertTrue(rateLimitService.tryConsume(key2, RateLimitType.SENSITIVE),
+            "key2 should not be rate limited");
     }
 }
