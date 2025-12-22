@@ -87,6 +87,19 @@
 			<artifactId>resend-java</artifactId>
 			<version>4.11.0</version>
 		</dependency>
+
+		<!-- Redis -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-redis</artifactId>
+		</dependency>
+
+		<!-- Bucket4j for Rate Limiting -->
+		<dependency>
+			<groupId>com.bucket4j</groupId>
+			<artifactId>bucket4j-core</artifactId>
+			<version>8.15.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>
