@@ -36,6 +36,11 @@ public class EnrollTeacherService {
 
             StudentProfile studentProfile = (StudentProfile) account;
 
+            // Initialize teacherIDs list if null
+            if (studentProfile.getTeacherIDs() == null) {
+                studentProfile.setTeacherIDs(new java.util.ArrayList<>());
+            }
+
             // Add teacher ID to the student's teacherIDs list
             studentProfile.addTeacherID(teacherId);
             studentProfile.setUpdatedAt(Timestamp.now());
