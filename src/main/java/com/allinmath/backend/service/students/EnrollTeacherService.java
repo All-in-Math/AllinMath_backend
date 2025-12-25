@@ -2,6 +2,7 @@ package com.allinmath.backend.service.students;
 
 import com.allinmath.backend.model.account.Account;
 import com.allinmath.backend.model.account.StudentProfile;
+import com.allinmath.backend.model.account.TeacherProfile;
 import com.allinmath.backend.repository.AccountRepository;
 import com.allinmath.backend.util.Logger;
 import com.google.cloud.Timestamp;
@@ -22,6 +23,15 @@ public class EnrollTeacherService {
         try {
             long startTime = System.currentTimeMillis();
             Logger.i("Enrolling teacher %s to student %s", teacherId, studentId);
+
+            // Validate that the requesting user is a teacher
+            Account teacherAccount = accountRepository.getAccount(teacherId);
+            if (teacherAccount == null) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Teacher account not found.");
+            }
+            if (!(teacherAccount instanceof TeacherProfile)) {
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only teachers can enroll to students.");
+            }
 
             // Get the student account
             Account account = accountRepository.getAccount(studentId);
