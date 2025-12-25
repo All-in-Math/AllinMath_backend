@@ -8,11 +8,12 @@ AllinMath Backend is a Spring Boot REST API application that serves students, te
 
 ## Technology Stack
 
-- **Framework**: Spring Boot 3.5.7
+- **Framework**: Spring Boot 3.5.9
 - **Java Version**: Java 17
 - **Build Tool**: Maven
 - **Database**: Firebase Firestore
 - **Authentication**: Firebase Auth
+- **Caching & Rate Limiting**: Redis, Bucket4j
 - **Additional Services**:
   - Sentry for error tracking
   - Statsig for feature flags
@@ -72,6 +73,7 @@ src/main/java/com/allinmath/backend/
 │   └── notification/    # Notification models
 ├── repository/          # Firestore data access layer
 │   └── account/         # Account repositories
+├── ratelimit/           # Rate limiting logic & interceptors
 ├── security/            # Security configuration and filters
 ├── service/             # Business logic layer
 │   ├── account/         # Account-related services
@@ -94,26 +96,35 @@ src/main/resources/
    - `model` - Domain entities (POJOs)
    - `dto` - Data transfer objects with validation
    - `config` - Configuration classes (use `@Configuration`)
+   - `ratelimit` - Rate limiting logic
 
-2. **Naming Conventions**:
+2. **Service Architecture**:
+   - Use **Single Responsibility Services** (e.g., `RegisterService`, `ChangeNameService`) instead of monolithic services.
+   - Each service should handle one specific business operation.
+
+3. **Rate Limiting**:
+   - Apply `@RateLimit(type = RateLimitType.TYPE)` to controller methods.
+   - Types: `SENSITIVE` (strict), `DEFAULT` (standard).
+
+4. **Naming Conventions**:
    - Controllers: `*Controller.java` (in `endpoint` or `controller` package)
    - Services: `*Service.java`
    - Repositories: `*Repository.java`
    - DTOs: `*DTO.java`
    - Models: Use descriptive nouns (e.g., `Account.java`, `Lesson.java`)
 
-3. **Dependency Injection**: Use constructor-based dependency injection (preferred over field injection)
+5. **Dependency Injection**: Use constructor-based dependency injection (preferred over field injection)
 
-4. **Validation**: Use Jakarta Bean Validation annotations on DTOs:
+6. **Validation**: Use Jakarta Bean Validation annotations on DTOs:
    - `@NotBlank`, `@Email`, `@Size`, etc.
    - Apply `@Valid` on controller method parameters
 
-5. **Error Handling**: 
+7. **Error Handling**: 
    - Create custom exceptions in the `exception` package
    - Use appropriate HTTP status codes in responses
    - Log errors using the custom `Logger` utility class
 
-6. **Logging**: Use the custom `Logger` utility class located in `com.allinmath.backend.util.Logger`:
+8. **Logging**: Use the custom `Logger` utility class located in `com.allinmath.backend.util.Logger`:
    - `Logger.i()` for info messages
    - `Logger.e()` for error messages  
    - `Logger.f()` for fatal errors
@@ -154,6 +165,7 @@ src/main/resources/
 3. **Controllers**:
    - Use `@RestController` annotation
    - Define base path with `@RequestMapping`
+   - Use explicit paths in mapping annotations (e.g., `@PostMapping("/create")`, `@GetMapping("/list")`)
    - Return `ResponseEntity<Map<String, String>>` for simple responses
    - Use `@AuthenticationPrincipal FirebaseToken token` for authenticated endpoints
    - Example:
@@ -194,7 +206,7 @@ src/main/resources/
 
 ### Environment Variables
 
-The application uses environment variables for configuration. Required variables include:
+The application uses environment variables for configuration, loaded via `spring-dotenv`. Required variables include:
 - `FIREBASE_CONFIG_PATH` - Path to Firebase service account JSON
 - `FIREBASE_PROJECT_ID` - Firebase project ID
 - `FIREBASE_STORAGE_BUCKET` - Firebase Storage bucket name

@@ -1,7 +1,7 @@
 package com.allinmath.backend.service.account;
 
 import com.allinmath.backend.model.account.Account;
-import com.allinmath.backend.repository.account.AccountRepository;
+import com.allinmath.backend.repository.AccountRepository;
 import com.allinmath.backend.storage.AccountStorageService;
 import com.allinmath.backend.util.Logger;
 import com.google.cloud.Timestamp;
@@ -9,7 +9,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.UserRecord;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service

@@ -2,7 +2,7 @@ package com.allinmath.backend.service.account;
 
 import com.allinmath.backend.dto.account.CompleteOnboardingDTO;
 import com.allinmath.backend.model.account.*;
-import com.allinmath.backend.repository.account.AccountRepository;
+import com.allinmath.backend.repository.AccountRepository;
 import com.allinmath.backend.util.Logger;
 import com.google.cloud.Timestamp;
 import org.springframework.stereotype.Service;

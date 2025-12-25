@@ -3,7 +3,7 @@ package com.allinmath.backend.ratelimit;
 import com.allinmath.backend.util.Logger;
 import io.github.bucket4j.Bandwidth;
 import io.github.bucket4j.Bucket;
-import io.github.bucket4j.Refill;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +22,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class RateLimitService {
 
     private final ConcurrentHashMap<String, Bucket> localBuckets = new ConcurrentHashMap<>();
-    
+
     @Value("${ratelimit.enabled}")
     private boolean rateLimitEnabled;
 
@@ -47,7 +47,7 @@ public class RateLimitService {
     /**
      * Checks if a request is allowed based on rate limit
      * 
-     * @param key Unique identifier for rate limiting (e.g., IP address or user ID)
+     * @param key  Unique identifier for rate limiting (e.g., IP address or user ID)
      * @param type Rate limit type (DEFAULT or SENSITIVE)
      * @return true if request is allowed, false if rate limit exceeded
      */
@@ -58,20 +58,20 @@ public class RateLimitService {
 
         String rateLimitKey = "ratelimit:" + type.name().toLowerCase() + ":" + key;
         Bucket bucket = localBuckets.computeIfAbsent(rateLimitKey, k -> createBucket(type));
-        
+
         boolean consumed = bucket.tryConsume(1);
-        
+
         if (!consumed) {
             Logger.w("Rate limit exceeded for key: " + key + ", type: " + type);
         }
-        
+
         return consumed;
     }
 
     /**
      * Gets remaining tokens for a key
      * 
-     * @param key Unique identifier for rate limiting
+     * @param key  Unique identifier for rate limiting
      * @param type Rate limit type
      * @return Number of available tokens
      */
@@ -90,22 +90,22 @@ public class RateLimitService {
      */
     private Bucket createBucket(RateLimitType type) {
         Bandwidth limit;
-        
+
         if (type == RateLimitType.SENSITIVE) {
-            limit = Bandwidth.classic(
-                sensitiveCapacity,
-                Refill.intervally(sensitiveRefillTokens, Duration.ofMinutes(sensitiveRefillDurationMinutes))
-            );
+            limit = Bandwidth.builder()
+                    .capacity(sensitiveCapacity)
+                    .refillIntervally(sensitiveRefillTokens, Duration.ofMinutes(sensitiveRefillDurationMinutes))
+                    .build();
         } else {
-            limit = Bandwidth.classic(
-                defaultCapacity,
-                Refill.intervally(defaultRefillTokens, Duration.ofMinutes(defaultRefillDurationMinutes))
-            );
+            limit = Bandwidth.builder()
+                    .capacity(defaultCapacity)
+                    .refillIntervally(defaultRefillTokens, Duration.ofMinutes(defaultRefillDurationMinutes))
+                    .build();
         }
-        
+
         return Bucket.builder()
-            .addLimit(limit)
-            .build();
+                .addLimit(limit)
+                .build();
     }
 
     /**

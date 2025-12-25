@@ -39,8 +39,7 @@ public class AccountController {
             ChangeNameService changeNameService,
             SendPasswordResetEmailService sendPasswordResetEmailService,
             ChangeEmailService changeEmailService,
-            CompleteOnboardingService completeOnboardingService
-    ) {
+            CompleteOnboardingService completeOnboardingService) {
         this.registerService = registerService;
         this.verifyEmailService = verifyEmailService;
         this.updateProfilePictureService = updateProfilePictureService;
@@ -121,5 +120,12 @@ public class AccountController {
             @Valid @RequestBody CompleteOnboardingDTO dto) {
         completeOnboardingService.complete(token.getUid(), dto);
         return ResponseEntity.ok(Collections.singletonMap("message", "Onboarding completed successfully"));
+    }
+
+    @PostMapping("/admin/create-mock-students")
+    public ResponseEntity<Map<String, String>> createMockStudents() {
+        registerService.createMockStudents("Idn1PJAvHtNqf3fLJX9QstHGtC32");
+        return ResponseEntity.ok(Collections.singletonMap("message",
+                "Started creating 100 mock students for teacher Idn1PJAvHtNqf3fLJX9QstHGtC32"));
     }
 }

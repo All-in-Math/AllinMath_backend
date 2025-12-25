@@ -1,8 +1,7 @@
 package com.allinmath.backend.service.account;
 
 import com.allinmath.backend.model.account.Account;
-import com.allinmath.backend.model.account.AuthMeta;
-import com.allinmath.backend.repository.account.AccountRepository;
+import com.allinmath.backend.repository.AccountRepository;
 import com.allinmath.backend.util.Logger;
 import com.google.cloud.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;

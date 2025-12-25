@@ -1,6 +1,7 @@
 package com.allinmath.backend.model.account;
 
 import com.google.cloud.Timestamp;
+
 import java.util.List;
 
 public class Account {
@@ -17,43 +18,104 @@ public class Account {
     private boolean isEnabled;
     private AuthMeta authMeta;
 
-    public Account() {}
+    public Account() {
+    }
 
     // Getters and Setters
-    public String getUid() { return uid; }
-    public void setUid(String uid) { this.uid = uid; }
+    public String getUid() {
+        return uid;
+    }
 
-    public String getFirstName() { return firstName; }
-    public void setFirstName(String firstName) { this.firstName = firstName; }
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
 
-    public String getLastName() { return lastName; }
-    public void setLastName(String lastName) { this.lastName = lastName; }
+    public String getFirstName() {
+        return firstName;
+    }
 
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
 
-    public UserRole getRole() { return role; }
-    public void setRole(UserRole role) { this.role = role; }
+    public String getLastName() {
+        return lastName;
+    }
 
-    public String getBio() { return bio; }
-    public void setBio(String bio) { this.bio = bio; }
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 
-    public String getProfileImageUrl() { return profileImageUrl; }
-    public void setProfileImageUrl(String profileImageUrl) { this.profileImageUrl = profileImageUrl; }
+    public String getEmail() {
+        return email;
+    }
 
-    public List<String> getSections() { return sections; }
-    public void setSections(List<String> sections) { this.sections = sections; }
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-    public int getAge() { return age; }
-    public void setAge(int age) { this.age = age; }
+    public UserRole getRole() {
+        return role;
+    }
 
+    public void setRole(UserRole role) {
+        this.role = role;
+    }
 
-    public Timestamp getUpdatedAt() { return updatedAt; }
-    public void setUpdatedAt(Timestamp updatedAt) { this.updatedAt = updatedAt; }
+    public String getBio() {
+        return bio;
+    }
 
-    public boolean isEnabled() { return isEnabled; }
-    public void setEnabled(boolean enabled) { isEnabled = enabled; }
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
 
-    public AuthMeta getAuthMeta() { return authMeta; }
-    public void setAuthMeta(AuthMeta authMeta) { this.authMeta = authMeta; }
+    public String getProfileImageUrl() {
+        return profileImageUrl;
+    }
+
+    public void setProfileImageUrl(String profileImageUrl) {
+        this.profileImageUrl = profileImageUrl;
+    }
+
+    public List<String> getSections() {
+        return sections;
+    }
+
+    public void setSections(List<String> sections) {
+        this.sections = sections;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public Timestamp getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Timestamp updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public boolean isEnabled() {
+        return isEnabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        isEnabled = enabled;
+    }
+
+    public AuthMeta getAuthMeta() {
+        return authMeta;
+    }
+
+    public void setAuthMeta(AuthMeta authMeta) {
+        this.authMeta = authMeta;
+    }
+
 }

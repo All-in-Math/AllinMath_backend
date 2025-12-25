@@ -1,7 +1,6 @@
 package com.allinmath.backend.config;
 
 import com.allinmath.backend.ratelimit.RateLimitInterceptor;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;

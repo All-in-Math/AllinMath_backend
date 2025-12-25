@@ -1,0 +1,273 @@
+{
+  "TYT": {
+    "Turkish": [
+      "Meaning in Words",
+      "Meaning in Sentences",
+      "Meaning in Paragraphs - Reading Comprehension",
+      "Phonetics",
+      "Spelling Rules",
+      "Punctuation",
+      "Word Structure",
+      "Parts of Speech (Noun, Adjective, Pronoun, Adverb, Preposition, Conjunction, Interjection)",
+      "Verbs (Verbals, Voice)",
+      "Parts of the Sentence",
+      "Sentence Types",
+      "Solecisms / Expression Disorders"
+    ],
+    "Basic Mathematics": [
+      "Basic Concepts",
+      "Place Values",
+      "Division and Divisibility",
+      "GCD-LCM",
+      "Rational Numbers",
+      "Simple Inequalities",
+      "Absolute Value",
+      "Exponential Numbers",
+      "Radical Numbers",
+      "Factorization",
+      "Ratio and Proportion",
+      "Equation Solving",
+      "Word Problems (Number, Fraction, Age, Work, Motion, Percentage, Profit-Loss, Mixture)",
+      "Sets",
+      "Functions",
+      "Permutation, Combination, Binomial",
+      "Probability",
+      "Data and Statistics"
+    ],
+    "Geometry": [
+      "Basic Concepts and Angles",
+      "Triangles (Angles, Sides, Area, Similarity)",
+      "Angle Bisector, Median, Centers",
+      "Special Triangles (Right, Isosceles, Equilateral)",
+      "Polygons",
+      "Quadrilaterals (Parallelogram, Rhombus, Rectangle, Square, Trapezoid, Deltoid)",
+      "Circle and Disc",
+      "Analytic Geometry (Point, Line)",
+      "Solid Geometry (Prism, Pyramid, Cube, Cylinder, Cone, Sphere)"
+    ],
+    "Physics": [
+      "Introduction to Physics",
+      "Matter and its Properties",
+      "Motion and Force",
+      "Energy",
+      "Heat, Temperature, and Expansion",
+      "Pressure and Buoyancy",
+      "Electrostatics",
+      "Electric Current and Circuits",
+      "Magnetism",
+      "Waves (Spring, Water, Sound, Earthquake)",
+      "Optics (Illumination, Shadow, Mirrors, Refraction, Lenses, Colors)"
+    ],
+    "Chemistry": [
+      "The Science of Chemistry",
+      "Atom and the Periodic System",
+      "Interactions Between Chemical Species",
+      "States of Matter",
+      "Nature and Chemistry",
+      "Basic Laws of Chemistry and Calculations",
+      "Acids, Bases, and Salts",
+      "Mixtures",
+      "Chemistry Everywhere"
+    ],
+    "Biology": [
+      "Common Features of Living Things",
+      "Basic Components of Living Things",
+      "Cell and Organelles",
+      "Substance Transport Across the Cell Membrane",
+      "Classification of Living Things",
+      "Mitosis and Asexual Reproduction",
+      "Meiosis and Sexual Reproduction",
+      "Basic Principles of Heredity",
+      "Ecosystem Ecology",
+      "Current Environmental Issues"
+    ],
+    "History": [
+      "History and Time",
+      "First Eras of Humanity",
+      "The World in the Middle Ages",
+      "The Turkish World in Early and Middle Ages",
+      "The Birth of Islamic Civilization",
+      "Turks' Acceptance of Islam and First Turkic-Islamic States",
+      "Seljuk Turkey in the Process of Settlement and Statehood",
+      "Ottoman Politics from Beylik to State",
+      "Warriors and Soldiers in the Statehood Process",
+      "Ottoman Empire as a World Power",
+      "The Sultan and Ottoman Central Organization",
+      "Ottoman Politics Against Changing World Balances",
+      "Changing State-Society Relations in the Age of Revolutions",
+      "The National Struggle - War of Independence",
+      "Kemalism and the Turkish Revolution"
+    ],
+    "Geography": [
+      "Nature, Human, and Geography",
+      "Earth's Shape and Movements",
+      "Map Knowledge - Cartography",
+      "Climatology",
+      "Shaping of the Earth (Internal and External Forces)",
+      "Three Elements in Nature: Water, Soil, Plants",
+      "Population and Settlement",
+      "Types of Economic Activities",
+      "Regions and Countries",
+      "Natural Disasters"
+    ],
+    "Philosophy": [
+      "Introduction to Philosophy",
+      "Epistemology - Philosophy of Knowledge",
+      "Ontology - Philosophy of Being",
+      "Ethics - Philosophy of Morality",
+      "Aesthetics - Philosophy of Art",
+      "Philosophy of Religion",
+      "Political Philosophy",
+      "Philosophy of Science"
+    ],
+    "Religious Culture and Ethics": [
+      "Knowledge and Belief",
+      "Religion and Islam",
+      "Prophet Muhammad According to the Quran",
+      "Some Concepts in the Quran",
+      "Relationship of Faith, Worship, and Morality"
+    ]
+  },
+  "AYT": {
+    "Mathematics": [
+      "Logic",
+      "Polynomials",
+      "Quadratic Equations",
+      "Quadratic Functions and Their Graphs - Parabola",
+      "Inequalities",
+      "Trigonometry",
+      "Logarithms",
+      "Sequences (Arithmetic, Geometric)",
+      "Limit and Continuity",
+      "Derivatives",
+      "Integrals"
+    ],
+    "Geometry (Mathematics)": [
+      "Angles, Length in Circles and Area of a Disc",
+      "Trigonometric Relations",
+      "Analytic Study of the Line",
+      "Transformation Geometry (Translation, Rotation, Reflection)",
+      "Analytic Study of the Circle"
+    ],
+    "Physics": [
+      "Vectors",
+      "Relative Motion",
+      "Newton's Laws of Motion (Dynamics)",
+      "Projectile Motion",
+      "Work, Power, Energy",
+      "Impulse and Linear Momentum",
+      "Torque and Equilibrium",
+      "Center of Mass",
+      "Simple Machines",
+      "Circular Motion",
+      "Simple Harmonic Motion",
+      "Wave Mechanics (Diffraction, Interference, Doppler Effect)",
+      "Electromagnetic Waves",
+      "Electrical Force, Field, and Potential",
+      "Parallel Plates and Capacitance",
+      "Magnetic Field and Force",
+      "Electromagnetic Induction",
+      "Alternating Current and Transformers",
+      "Introduction to Atomic Physics and Radioactivity",
+      "Modern Physics (Photoelectric Effect, Compton Scattering, Special Relativity)",
+      "Applications of Modern Physics in Technology"
+    ],
+    "Chemistry": [
+      "Quantum Numbers and Electron Configurations",
+      "Periodic Properties",
+      "Gases",
+      "Liquid Solutions and Solubility",
+      "Energy in Chemical Reactions (Thermochemistry)",
+      "Speed in Chemical Reactions (Kinetics)",
+      "Chemical Equilibrium",
+      "Acid-Base Equilibrium",
+      "Solubility Equilibrium",
+      "Chemistry and Electricity (Redox, Electrochemical Cells)",
+      "Introduction to Organic Chemistry",
+      "Organic Compounds (Alkanes, Alkenes, Alkynes, Alcohols, Ethers, Aldehydes, Ketones, Carboxylic Acids, Esters)",
+      "Energy Sources and Scientific Developments"
+    ],
+    "Biology": [
+      "Nervous System",
+      "Endocrine System",
+      "Sense Organs",
+      "Support and Movement System",
+      "Digestive System",
+      "Circulatory and Immune System",
+      "Respiratory System",
+      "Excretory System",
+      "Reproductive System and Embryonic Development",
+      "From Gene to Protein (Nucleic Acids, Protein Synthesis)",
+      "Cellular Respiration",
+      "Photosynthesis and Chemosynthesis",
+      "Plant Biology (Plant Tissues, Organs, Transport, Nutrition, Sexual Reproduction)",
+      "Energy Transformations in Living Organisms",
+      "Community and Population Ecology"
+    ],
+    "Turkish Language and Literature": [
+      "Literary Knowledge (Fine Arts, Literary Movements)",
+      "Poetry Knowledge (Forms, Types, Harmony)",
+      "Rhetorical Devices / Figures of Speech",
+      "Text Types (Novel, Story, Drama, Essay, etc.)",
+      "Pre-Islamic Turkish Literature",
+      "Folk Literature (Anonymous, Religious-Mystical, Minstrel Style)",
+      "Divan - Classical Ottoman Literature",
+      "Tanzimat Period Literature",
+      "Servet-i Fünun Period Literature",
+      "Fecr-i Ati Period Literature",
+      "National Literature Period",
+      "Republican Period Literature (Poetry, Novel, Story, Drama)"
+    ],
+    "History-1": [
+      "The Ottoman Empire and the World in the Early 20th Century",
+      "National Struggle Period",
+      "Kemalism and the Turkish Revolution",
+      "Turkey and the World in the Interwar Period",
+      "Turkey and the World During World War II",
+      "Turkey and the World After World War II",
+      "The World and Turkey in the Age of Social Revolution",
+      "Turkey and the World on the Threshold of the 21st Century"
+    ],
+    "Geography-1": [
+      "Ecosystem and Matter Cycles",
+      "Population Policies",
+      "Population and Settlement in Turkey",
+      "Economic Activities",
+      "Turkey's Economy (Agriculture, Livestock, Minerals, Industry, Transportation, Trade, Tourism)",
+      "Global Environment: Regions and Countries",
+      "Culture Regions",
+      "Environment and Society"
+    ],
+    "History-2": [
+      "(Covers all History-1 subjects)"
+    ],
+    "Geography-2": [
+      "(Covers all Geography-1 subjects)"
+    ],
+    "Philosophy Group - Psychology": [
+      "Intro to Psychology",
+      "Basic Processes",
+      "Learning, Memory, Thinking",
+      "Fundamentals of Mental Health"
+    ],
+    "Philosophy Group - Sociology": [
+      "Intro to Sociology",
+      "Individual and Society",
+      "Social Structure",
+      "Social Change and Development",
+      "Society and Culture",
+      "Social Institutions"
+    ],
+    "Philosophy Group - Logic": [
+      "Intro to Logic",
+      "Classical Logic (Concepts, Propositions, Inference)",
+      "Logic and Language",
+      "Symbolic Logic (Propositional Logic, Quantifier Logic)"
+    ],
+    "Religious Culture and Ethics": [
+      "Islam and Science, Islam in Anatolia",
+      "Interpretations in Islamic Thought (Sects)",
+      "Living Religions (Judaism, Christianity, Hinduism, Buddhism)"
+    ]
+  }
+}
