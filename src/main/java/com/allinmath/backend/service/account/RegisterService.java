@@ -72,17 +72,17 @@ public class RegisterService {
 
             accountRepository.createAccount(account);
             Logger.i("Registration successful for: %s", dto.getEmail());
-//
-//            // Send welcome email
-//            CreateEmailOptions welcomeParams = CreateEmailOptions.builder()
-//                .from(fromEmail)
-//                .to(userRecord.getEmail())
-//                .subject("Welcome to AllinMath!")
-//                .html("<p>Dear " + dto.getFirstName() + ",</p><p>Welcome to AllinMath! We're excited to have you on board.</p>")
-//                .build();
-//            resend.emails().send(welcomeParams);
-//
-//            // Send verification email by calling the existing service
+
+           // Send welcome email
+           CreateEmailOptions welcomeParams = CreateEmailOptions.builder()
+               .from(fromEmail)
+               .to(userRecord.getEmail())
+               .subject("Welcome to AllinMath!")
+               .html("<p>Dear " + dto.getFirstName() + ",</p><p>Welcome to AllinMath! We're excited to have you on board.</p>")
+               .build();
+           resend.emails().send(welcomeParams);
+
+           // Send verification email by calling the existing service
             verificationEmailService.send(userRecord.getUid());
 
             return customToken;

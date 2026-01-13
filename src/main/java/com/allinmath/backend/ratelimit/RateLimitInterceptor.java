@@ -25,11 +25,10 @@ public class RateLimitInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-        if (!(handler instanceof HandlerMethod)) {
+        if (!(handler instanceof HandlerMethod handlerMethod)) {
             return true;
         }
 
-        HandlerMethod handlerMethod = (HandlerMethod) handler;
         RateLimit rateLimit = handlerMethod.getMethodAnnotation(RateLimit.class);
 
         if (rateLimit == null) {
@@ -76,7 +75,7 @@ public class RateLimitInterceptor implements HandlerInterceptor {
     }
 
     /**
-     * Extracts client IP address from request, considering proxy headers
+     * Extracts client IP address from the request, considering proxy headers
      */
     private String getClientIp(HttpServletRequest request) {
         String ip = request.getHeader("X-Forwarded-For");

@@ -24,12 +24,12 @@ public class ChangeNameService {
         String fullName = dto.getFirstName() + " " + dto.getLastName();
 
         try {
-            // 1. Update Firebase Auth
+            // Update Firebase Auth
             UserRecord.UpdateRequest request = new UserRecord.UpdateRequest(uid)
                     .setDisplayName(fullName);
             FirebaseAuth.getInstance().updateUser(request);
 
-            // 2. Update Firestore
+            // Update Firestore
             Account account = accountRepository.getAccount(uid);
             if (account == null) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User account not found.");

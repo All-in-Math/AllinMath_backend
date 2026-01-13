@@ -7,7 +7,6 @@ import com.google.cloud.firestore.*;
 import com.google.firebase.cloud.FirestoreClient;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
@@ -28,17 +27,18 @@ public class TeachersRepository {
         // or just try to build a valid query.
 
         if (dto.getMinPrice() != null) {
-            query = query.whereGreaterThanOrEqualTo("hourlyRate", dto.getMinPrice());
+            query = query.whereGreaterThanOrEqualTo("hourlyRate", dto.getMinPrice().doubleValue());
         }
         if (dto.getMaxPrice() != null) {
-            query = query.whereLessThanOrEqualTo("hourlyRate", dto.getMaxPrice());
+            query = query.whereLessThanOrEqualTo("hourlyRate", dto.getMaxPrice().doubleValue());
         }
         if (dto.getMinRating() != null) {
-            query = query.whereGreaterThanOrEqualTo("rating", dto.getMinRating());
+            query = query.whereGreaterThanOrEqualTo("rating", dto.getMinRating().doubleValue());
         }
 
-        // For courses and subjects, Firestore doesn't support multiple array-contains in one query.
-        // We'll fetch and filter in memory for those if multiple are provided, 
+        // For courses and subjects, Firestore doesn't support multiple array-contains
+        // in one query.
+        // We'll fetch and filter in memory for those if multiple are provided,
         // or just use one if only one is provided.
 
         ApiFuture<QuerySnapshot> querySnapshot = query.get();
@@ -58,19 +58,21 @@ public class TeachersRepository {
         if (dto.getSubject() != null && !dto.getSubject().isEmpty()) {
             boolean matchesTyt = teacher.getTytCourses() != null && teacher.getTytCourses().contains(dto.getSubject());
             boolean matchesAyt = teacher.getAytCourses() != null && teacher.getAytCourses().contains(dto.getSubject());
-            if (!matchesTyt && !matchesAyt) return false;
+            if (!matchesTyt && !matchesAyt)
+                return false;
         }
 
         if (dto.getCourses() != null && !dto.getCourses().isEmpty()) {
             boolean matchesAny = false;
             for (String course : dto.getCourses()) {
                 if ((teacher.getTytCourses() != null && teacher.getTytCourses().contains(course)) ||
-                    (teacher.getAytCourses() != null && teacher.getAytCourses().contains(course))) {
+                        (teacher.getAytCourses() != null && teacher.getAytCourses().contains(course))) {
                     matchesAny = true;
                     break;
                 }
             }
-            if (!matchesAny) return false;
+            if (!matchesAny)
+                return false;
         }
 
         return true;

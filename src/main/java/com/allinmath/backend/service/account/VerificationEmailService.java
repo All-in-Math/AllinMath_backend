@@ -55,14 +55,14 @@ public class VerificationEmailService {
             String link = FirebaseAuth.getInstance().generateEmailVerificationLink(user.getEmail());
             Logger.d("Generated verification link for %s", user.getEmail());
             Logger.d("Link: %s", link);
-//            CreateEmailOptions params = CreateEmailOptions.builder()
-//                    .from(fromEmail)
-//                    .to(user.getEmail())
-//                    .subject("Verify your email for AllinMath")
-//                    .html("<p>Please verify your email by clicking on the following link: <a href=\"" + link + "\">" + link + "</a></p>")
-//                    .build();
-//
-//            resend.emails().send(params);
+           CreateEmailOptions params = CreateEmailOptions.builder()
+                   .from(fromEmail)
+                   .to(user.getEmail())
+                   .subject("Verify your email for AllinMath")
+                   .html("<p>Please verify your email by clicking on the following link: <a href=\"" + link + "\">" + link + "</a></p>")
+                   .build();
+
+           resend.emails().send(params);
             Logger.i("Verification email sent to %s", user.getEmail());
 
             Account account = accountRepository.getAccount(uid);
